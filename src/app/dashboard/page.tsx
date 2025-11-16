@@ -1,5 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
+import { fetchWithAuth } from "../utils/api";
+import { User } from "../utils/types";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 // import { fetchWithAuth } from "../utils/api";
 // import { User } from "../utils/types";
 // import { useRouter } from "next/navigation";
@@ -24,32 +28,37 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [desde, setDesde] = useState("");
   const [hasta, setHasta] = useState("");
-  // const [usuario, setUsuario] = useState<User | null>();
-  // const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [usuario, setUsuario] = useState<User | null>();
+  const router = useRouter();
+
+  useEffect(() => {
+    
+    fetchWithAuth("http://localhost:3001/api/profile").then(async (res) => {
+      const data = await res.json();
+      if (data.data[0].rol_id !== 3) {
+            toast.error("Acceso no autorizado")
+            router.push("/")
+            return
+      }
+      setUsuario(data.data[0]);
+    });
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // useEffect(() => {
+  //   console.log(usuario?.rol_id);
     
-  //   fetchWithAuth("http://localhost:3001/api/profile").then(async (res) => {
-  //     const data = await res.json();
-  //     console.log("probando data", data, data.message =='Token inválido');
-
-  //     setUsuario(data.data[0]);
-  //   });
-    
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log(data);
   //         if (usuario?.rol_id !== 3 ) {
-  //           console.log("true");
+  //           toast.error("Acceso no autorizado")
+  //           router.push("/")
   //         }
-  //       toast.error("Acceso no autorizado")
 
-  //       router.push("/")
   //   return () => {
       
   //   };
-  // }, [data]);
+  // }, [usuario]);
   
   const fetchDashboard = async (from?: string, to?: string) => {
     setLoading(true);

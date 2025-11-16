@@ -15,7 +15,7 @@ export function Menu() {
     fetchWithAuth("http://localhost:3001/api/profile").then(async (res) => {
       const data = await res.json();
       console.log("probando data", data);
-      setUsuario(data.data[0]);
+      setUsuario(data?.data[0]);
 
     });
   }, []);

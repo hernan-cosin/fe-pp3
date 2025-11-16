@@ -31,7 +31,7 @@ export default function SignIn() {
       });
 
       const data = await res.json();
-
+      
       if (!data.token) {
         toast.error("Error al ingresar usuario");
       } else {

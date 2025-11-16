@@ -11,10 +11,10 @@
 
 .main {
     max-width: 1024px;
-  margin: 20px auto 0 auto;
+  margin: 0 auto 30px auto;
   min-height: 70vh;
   font-family: Arial, Helvetica, sans-serif;
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
   /* display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,7 +24,7 @@
 .banner {
   /* width: 100%; */
   margin: 15px;
-  background: linear-gradient(135deg, #1e293b, #0f172a);
+  background: linear-gradient(325deg,  #10192d, #1f315b);
   color: white;
   text-align: center;
   padding: 4rem 2rem;
@@ -32,9 +32,47 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
+.banner2 {
+  background: steelblue;
+  color: white;
+  padding: 30px 20px;
+  text-align: center;
+  border-radius: 0 0 10px 10px;
+  /* border-radius: 12px; */
+  margin-bottom: 20px;
+}
+
+.banner2 h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.banner2 p {
+  font-size: 18px;
+  opacity: 0.9;
+  margin-bottom: 15px;
+}
+
+.ctaButton {
+  background: #ffffff;
+  color: #005bb5;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: 0.3s ease;
+  margin-bottom: 30px;
+}
+
+.ctaButton:hover {
+  background: #e6e6e6;
+}
 .title {
   /* font-size: 2.5rem;
   margin-bottom: 1rem; */
+  margin-top: 30px;
 }
 
 .subtitle {

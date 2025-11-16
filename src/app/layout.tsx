@@ -1,5 +1,6 @@
 'use client'
 import { Header } from "./components/header"
+import { Footer } from "./components/footer";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import style from "./page.module.css"
@@ -23,7 +24,7 @@ export default function mainLayout({
             </Provider>
           </MercadoPagoProvider>
         </main>
-        <footer></footer>
+        <Footer/>
       </body>
     </html>
   )

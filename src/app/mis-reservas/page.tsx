@@ -79,7 +79,7 @@ export default function MyAppointments () {
                             <p>
                                 <strong>Precio:</strong> {reserva.monto_asignado}
                             </p>
-                            {!preferenceId && reserva.monto_asignado? <Button className={""} onClick={()=>{handlePayButton(reserva.talleres.id, reserva.id)}}>Abonar</Button> : 
+                            {!preferenceId && reserva.monto_asignado? <Button className={styles.payButton} onClick={()=>{handlePayButton(reserva.talleres.id, reserva.id)}}>Abonar</Button> : 
                                 
                             (
                                 <div></div>

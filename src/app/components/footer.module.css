@@ -1,0 +1,24 @@
+.footer {
+    background: #3382b8;
+    margin: 0;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    flex-direction: row;
+    padding: 5px;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.titulo {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.contactoUl {
+    list-style-type: none;
+}
+
+.informacionUl {
+    list-style-type: none;
+}

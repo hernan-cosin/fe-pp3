@@ -89,36 +89,47 @@ useEffect(() => {
         ))}
       </select>
 
-      <MapContainer
-        center={[-34.6037, -58.3816]} // coordenadas iniciales (Buenos Aires)
-        zoom={12}
-        style={{ height: "70vh", width: "100%" }}
-      >
-        <TileLayer
-          attribution='&copy; OpenStreetMap contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+      <p className={styles.resultado}>
+      {talleres?.length > 0
+        ? `Se encontraron ${talleres.length} taller(es) en la zona seleccionada`
+        : barrioId
+          ? "No se encontraron talleres en este barrio"
+          : "Seleccione un barrio para ver los talleres disponibles"}
+    </p>
 
-        {talleres?.map((taller) => (
-          <Marker
-            key={taller.id}
-            position={[taller.latitud, taller.longitud]}
-            icon={icon}
-          >
-            <Popup>
-              <strong>{taller.nombre_taller}</strong>
-              <br />
-              {taller.direccion}
-              <br />
-              {taller.barrio_id?.nombre}
+      {/* <div id="mapSection"> */}
+        <MapContainer
+          center={[-34.6037, -58.3816]} // coordenadas iniciales (Buenos Aires)
+          zoom={12}
+          style={{ height: "70vh", width: "100%" }}
+          id="mapSection"
+        >
+          <TileLayer
+            attribution='&copy; OpenStreetMap contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
 
-              <br />
-              <strong onClick={()=> {handleReservation(taller.id)}} className={styles.reserve}>Reservar</strong>
+          {talleres?.map((taller) => (
+            <Marker
+              key={taller.id}
+              position={[taller.latitud, taller.longitud]}
+              icon={icon}
+            >
+              <Popup>
+                <strong>{taller.nombre_taller}</strong>
+                <br />
+                {taller.direccion}
+                <br />
+                {taller.barrio_id?.nombre}
 
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
+                <br />
+                <strong onClick={()=> {handleReservation(taller.id)}} className={styles.reserve}>Reservar</strong>
+
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      {/* </div> */}
     </div>
   );
 }

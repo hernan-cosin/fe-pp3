@@ -1,8 +1,76 @@
 .header {
     /* max-width: 1024px; */
     margin: 0 auto;
-    display: flex;
+    /* display: flex;
+    flex-direction: row;
+    justify-content: space-around; */
+    background-color: steelblue;
+}
+
+.container {
+    max-width: 1024px;
+    margin: 0 auto;
+    align-items: center;
+        display: flex;
     flex-direction: row;
     justify-content: space-around;
-    background-color: steelblue;
+}
+
+.titulo {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.banner {
+  /* width: 100%; */
+  margin: 15px;
+  background: linear-gradient(325deg,  #10192d, #1f315b);
+  color: white;
+  text-align: center;
+  padding: 4rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);  font-family: Arial, Helvetica, sans-serif;
+  max-width: 1024px;
+  margin: 0 auto 15px auto;
+}
+
+.banner2 {
+  width: 100%;
+  background: steelblue;
+  color: white;
+  padding: 30px 20px;
+  text-align: center;
+  /* border-radius: 12px; */
+  margin-bottom: 20px;  font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.banner2 h1 {
+  font-size: 28px;
+  margin-bottom: 10px;  font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.banner2 p {
+  font-size: 18px;
+  opacity: 0.9;
+  margin-bottom: 15px;  font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.ctaButton {
+  background: #ffffff;
+  color: #005bb5;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: 0.3s ease;
+  margin-bottom: 30px;  font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.ctaButton:hover {
+  background: #e6e6e6;
 }
