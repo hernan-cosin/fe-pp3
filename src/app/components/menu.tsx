@@ -62,6 +62,12 @@ export function Menu() {
             <Link href="/mis-reservas" className={styles.link}>
               Mis reservas
             </Link>
+            {
+              usuario.rol_id == 3?
+              <Link href="/dashboard" className={styles.link}>
+                Tablero de control
+              </Link> : ""
+            }
           </>
         ) : (
           <>

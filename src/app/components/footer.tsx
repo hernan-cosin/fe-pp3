@@ -20,6 +20,8 @@ export function Footer (){
             <li>📧 Email: buscamecanico@gmail.com</li>
             <br />
             <li>📍 Dirección: Buenos Aires, Argentina.</li>
+            <br />
+            <a href="https://www.instagram.com/" aria-label="Instagram" className={styles.instagramLink}>📷 Instagram</a>
           </ul>
 
           {/* <div className="flex gap-4 mt-4 text-xl">

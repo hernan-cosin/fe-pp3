@@ -22,3 +22,7 @@
 .informacionUl {
     list-style-type: none;
 }
+
+.instagramLink {
+    text-decoration: none;
+}

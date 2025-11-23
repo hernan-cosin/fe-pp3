@@ -81,7 +81,7 @@ useEffect(() => {
         onChange={(e) => setBarrioId(Number(e.target.value))}
         className={styles.select}
       >
-        <option value="">Seleccione un barrio</option>
+        <option value="" >Seleccione un barrio</option>
         {barrios.map((b) => (
           <option key={b.id} value={b.id}>
             {b.nombre}

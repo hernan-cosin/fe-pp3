@@ -1,9 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { fetchWithAuth } from "../utils/api";
+// import { fetchWithAuth } from "../utils/api";
 import { User } from "../utils/types";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import styles from "./dashboard.module.css"
+import { fetchWithAuth } from "../utils/api";
 // import { fetchWithAuth } from "../utils/api";
 // import { User } from "../utils/types";
 // import { useRouter } from "next/navigation";
@@ -33,22 +35,31 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    
-    fetchWithAuth("http://localhost:3001/api/profile").then(async (res) => {
-      const data = await res.json();
-      if (data.data[0].rol_id !== 3) {
-            toast.error("Acceso no autorizado")
-            router.push("/")
-            return
-      }
-      setUsuario(data.data[0]);
-    });
-    
+    const verificarUsuario = async () => {  
+      
+        const res = await fetchWithAuth("http://localhost:3001/api/profile", 
+          {
+        method: "GET",
+      });
+        const data = await res.json();
+      
+        if (data?.message || data?.data[0].rol_id !== 3) {
+          toast.error("Acceso no autorizado")
+          router.push("/")
+          return
+        } 
+        console.log(data);
+    }
+    verificarUsuario()
+    return () => {
+      
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  
   // useEffect(() => {
-  //   console.log(usuario?.rol_id);
+    
     
   //         if (usuario?.rol_id !== 3 ) {
   //           toast.error("Acceso no autorizado")
@@ -58,7 +69,7 @@ export default function DashboardPage() {
   //   return () => {
       
   //   };
-  // }, [usuario]);
+  // }, [router, usuario]);
   
   const fetchDashboard = async (from?: string, to?: string) => {
     setLoading(true);
@@ -103,12 +114,19 @@ export default function DashboardPage() {
         fetchDashboard(desde, hasta);
     };
 
+    function goToEditar() {
+      router.push("/dashboard-shops")
+    }
+
   if (loading) return <p>Cargando datos del tablero...</p>;
   if (!data) return <p>No hay información disponible.</p>;
 
   return (
     <main style={{ padding: "2rem" }}>
-      <h1>📊 Panel de Control</h1>
+      <div className={styles.titulo}>
+        <h1>📊 Panel de Control</h1>
+        <button className={styles.buttonEditar} onClick={goToEditar}>Ver/editar talleres</button>
+      </div>
 
       {/* FILTROS DE FECHA */}
       <form
@@ -126,6 +144,7 @@ export default function DashboardPage() {
             type="date"
             value={desde}
             onChange={(e) => setDesde(e.target.value)}
+            className={styles.input}
           />
         </div>
 
@@ -135,13 +154,15 @@ export default function DashboardPage() {
             type="date"
             value={hasta}
             onChange={(e) => setHasta(e.target.value)}
+            className={styles.input}
+
           />
         </div>
 
-        <button type="submit">Filtrar</button>
+        <button type="submit" className={styles.buttonFiltrar}>Filtrar</button>
       </form>
 
-      <p>
+      <p className={styles.periodo}>
         Periodo: {data.periodo.desde} → {data.periodo.hasta}
       </p>
 
@@ -159,12 +180,14 @@ export default function DashboardPage() {
         <Card
           title="Ingresos totales"
           value={`$ ${data.totalIngresos.toLocaleString("es-AR")}`}
+
         />
       </section>
 
       {/* TABLA DE RESUMEN */}
       <h2 style={{ marginTop: "2rem" }}>📅 Resumen por mes</h2>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", background: "lightgray",
+    borderRadius: "4px"}}>
         <thead>
           <tr>
             <th style={thStyle}>Mes</th>
@@ -186,7 +209,7 @@ export default function DashboardPage() {
   );
 }
 
-const Card = ({ title, value }: { title: string; value: string | number }) => (
+const Card = ({ title, value }: { title: string; value: string | number;}) => (
   <div
     style={{
       flex: "1 1 200px",
@@ -195,6 +218,7 @@ const Card = ({ title, value }: { title: string; value: string | number }) => (
       borderRadius: "8px",
       textAlign: "center",
       boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+      backgroundColor: "#d3d3d3",
     }}
   >
     <h3>{title}</h3>
@@ -203,12 +227,12 @@ const Card = ({ title, value }: { title: string; value: string | number }) => (
 );
 
 const thStyle = {
-  borderBottom: "2px solid #ddd",
+  borderBottom: "2px solid #000000",
   padding: "0.5rem",
   textAlign: "left" as const,
 };
 
 const tdStyle = {
-  borderBottom: "1px solid #eee",
+  borderBottom: "1px solid #1a1a1a",
   padding: "0.5rem",
 };
