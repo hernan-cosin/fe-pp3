@@ -1,15 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-// import { fetchWithAuth } from "../utils/api";
 import { User } from "../utils/types";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import styles from "./dashboard.module.css"
+import styles from "./dashboard.module.css";
 import { fetchWithAuth } from "../utils/api";
-// import { fetchWithAuth } from "../utils/api";
-// import { User } from "../utils/types";
-// import { useRouter } from "next/navigation";
-// import { toast } from "react-toastify";
 
 interface ResumenMes {
   mes: string;
@@ -25,8 +20,17 @@ interface DashboardData {
   resumenPorMes: ResumenMes[];
 }
 
+interface ResumenPorTaller {
+  taller_id: number;
+  taller: string;
+  monto_recaudado: number;
+  cantidad_turnos: number;
+}
+
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
+  const [dataResumenPorTaller, setDataResumenPorTaller] =
+    useState<ResumenPorTaller | null>(null);
   const [loading, setLoading] = useState(true);
   const [desde, setDesde] = useState("");
   const [hasta, setHasta] = useState("");
@@ -35,42 +39,24 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const verificarUsuario = async () => {  
-      
-        const res = await fetchWithAuth("http://localhost:3001/api/profile", 
-          {
+    const verificarUsuario = async () => {
+      const res = await fetchWithAuth("http://localhost:3001/api/profile", {
         method: "GET",
       });
-        const data = await res.json();
-      
-        if (data?.message || data?.data[0].rol_id !== 3) {
-          toast.error("Acceso no autorizado")
-          router.push("/")
-          return
-        } 
-        console.log(data);
-    }
-    verificarUsuario()
-    return () => {
-      
+      const data = await res.json();
+
+      if (data?.message || data?.data[0].rol_id !== 3) {
+        toast.error("Acceso no autorizado");
+        router.push("/");
+        return;
+      }
+      console.log(data);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    verificarUsuario();
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  
-  // useEffect(() => {
-    
-    
-  //         if (usuario?.rol_id !== 3 ) {
-  //           toast.error("Acceso no autorizado")
-  //           router.push("/")
-  //         }
-
-  //   return () => {
-      
-  //   };
-  // }, [router, usuario]);
-  
   const fetchDashboard = async (from?: string, to?: string) => {
     setLoading(true);
     try {
@@ -83,6 +69,12 @@ export default function DashboardPage() {
       const res = await fetch(`http://localhost:3001/api/dashboard?${query}`);
       const json = await res.json();
       setData(json);
+
+      const resResumenPorTaller = await fetch(
+        `http://localhost:3001/api/dashboard/resumen-por-taller`
+      );
+      const jsonResumenPorTaller = await resResumenPorTaller.json();
+      setDataResumenPorTaller(jsonResumenPorTaller);
     } catch (error) {
       console.error("Error al obtener dashboard:", error);
     } finally {
@@ -90,33 +82,19 @@ export default function DashboardPage() {
     }
   };
 
-    // 🔄 Cargar datos al iniciar
+  // 🔄 Cargar datos al iniciar
   useEffect(() => {
     fetchDashboard();
   }, []);
-//   useEffect(() => {
-//     const fetchDashboard = async () => {
-//       try {
-//         const res = await fetch("http://localhost:3001/api/dashboard");
-//         const json = await res.json();
-//         setData(json);
-//       } catch (error) {
-//         console.error("Error al obtener dashboard:", error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
 
-//     fetchDashboard();
-//   }, []);
-    const handleFilter = (e: React.FormEvent) => {
-        e.preventDefault();
-        fetchDashboard(desde, hasta);
-    };
+  const handleFilter = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetchDashboard(desde, hasta);
+  };
 
-    function goToEditar() {
-      router.push("/dashboard-shops")
-    }
+  function goToEditar() {
+    router.push("/dashboard-shops");
+  }
 
   if (loading) return <p>Cargando datos del tablero...</p>;
   if (!data) return <p>No hay información disponible.</p>;
@@ -125,7 +103,9 @@ export default function DashboardPage() {
     <main style={{ padding: "2rem" }}>
       <div className={styles.titulo}>
         <h1>📊 Panel de Control</h1>
-        <button className={styles.buttonEditar} onClick={goToEditar}>Ver/editar talleres</button>
+        <button className={styles.buttonEditar} onClick={goToEditar}>
+          Gestión de talleres
+        </button>
       </div>
 
       {/* FILTROS DE FECHA */}
@@ -155,11 +135,12 @@ export default function DashboardPage() {
             value={hasta}
             onChange={(e) => setHasta(e.target.value)}
             className={styles.input}
-
           />
         </div>
 
-        <button type="submit" className={styles.buttonFiltrar}>Filtrar</button>
+        <button type="submit" className={styles.buttonFiltrar}>
+          Filtrar
+        </button>
       </form>
 
       <p className={styles.periodo}>
@@ -180,17 +161,22 @@ export default function DashboardPage() {
         <Card
           title="Ingresos totales"
           value={`$ ${data.totalIngresos.toLocaleString("es-AR")}`}
-
         />
       </section>
 
       {/* TABLA DE RESUMEN */}
-      <h2 style={{ marginTop: "2rem" }}>📅 Resumen por mes</h2>
-      <table style={{ width: "100%", borderCollapse: "collapse", background: "lightgray",
-    borderRadius: "4px"}}>
+      <h2 style={{ marginTop: "2rem" }}>📅 Total de ingresos por mes</h2>
+      <table
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          background: "lightgray",
+          borderRadius: "4px",
+        }}
+      >
         <thead>
-          <tr>
-            <th style={thStyle}>Mes</th>
+          <tr style={trStyle}>
+            <th style={thStyle}>Fecha</th>
             <th style={thStyle}>Turnos</th>
             <th style={thStyle}>Ingresos</th>
           </tr>
@@ -200,16 +186,58 @@ export default function DashboardPage() {
             <tr key={r.mes}>
               <td style={tdStyle}>{r.mes}</td>
               <td style={tdStyle}>{r.turnos}</td>
-              <td style={tdStyle}>$ {r.ingresos.toLocaleString("es-AR")}</td>
+              <td style={tdStyle}>$ {r.ingresos}</td>
+              {/* <td style={tdStyle}>$ {r.ingresos.toLocaleString("es-AR")}</td> */}
             </tr>
           ))}
         </tbody>
       </table>
+
+      <div className={styles.resumenPorTallerContainer}>
+        <h2>Resumen Mensual por taller</h2>
+
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            background: "lightgray",
+            borderRadius: "4px",
+          }}
+        >
+          <thead>
+            <tr style={trStyle}>
+              <th style={thStyle}>Fecha</th>
+              <th style={thStyle}>Taller</th>
+              {/* <th style={thStyle}>Hora</th> */}
+              <th style={thStyle}>Cantidad de Turnos </th>
+              <th style={thStyle}>Monto recaudado </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {dataResumenPorTaller?.map((item) => (
+              <tr key={`${item.taller_id}-${item.mes}`}>
+                <td style={tdStyle}>
+                  {new Intl.DateTimeFormat("es-AR", {
+                    month: "short",
+                    year: "numeric",
+                  })
+                    .format(new Date(item.mes))
+                    .replace(".", "")}
+                </td>
+                <td style={tdStyle}>{item.taller}</td>
+                <td style={tdStyle}>{item.cantidad_turnos}</td>
+                <td style={tdStyle}>${item.monto_recaudado}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </main>
   );
 }
 
-const Card = ({ title, value }: { title: string; value: string | number;}) => (
+const Card = ({ title, value }: { title: string; value: string | number }) => (
   <div
     style={{
       flex: "1 1 200px",
@@ -235,4 +263,8 @@ const thStyle = {
 const tdStyle = {
   borderBottom: "1px solid #1a1a1a",
   padding: "0.5rem",
+};
+
+const trStyle = {
+  backgroundColor: "rgb(151 151 151)",
 };

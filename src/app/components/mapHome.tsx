@@ -24,6 +24,7 @@ interface Taller {
         "longitud": number,
         "dias_laborales": string[],
         "usuario_id": number,
+        "estado":boolean,
         "ciudad": string,
         "barrio_id": {nombre:string};
 }
@@ -90,8 +91,8 @@ useEffect(() => {
       </select>
 
       <p className={styles.resultado}>
-      {talleres?.length > 0
-        ? `Se encontraron ${talleres.length} taller(es) en la zona seleccionada`
+      {talleres?.filter((t)=>t.estado)?.length > 0
+        ? `Se encontraron ${talleres?.filter((t)=>t.estado)?.length} taller(es) en la zona seleccionada`
         : barrioId
           ? "No se encontraron talleres en este barrio"
           : "Seleccione un barrio para ver los talleres disponibles"}
@@ -109,7 +110,7 @@ useEffect(() => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {talleres?.map((taller) => (
+          {talleres?.filter((t) => t.estado).map((taller) => (
             <Marker
               key={taller.id}
               position={[taller.latitud, taller.longitud]}
